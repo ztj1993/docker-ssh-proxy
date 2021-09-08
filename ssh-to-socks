@@ -1,0 +1,6 @@
+#!/bin/sh
+
+/usr/bin/sshpass -p ${SSH_PASS} \
+    ssh -o StrictHostKeyChecking=no -N \
+    ${SSH_USER}@${SSH_HOST} -p ${SSH_PORT:-22} \
+    -D 0.0.0.0:${SOCKS_PORT:-1080}

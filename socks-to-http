@@ -1,0 +1,3 @@
+#!/bin/sh
+
+brook socks5tohttp -l 0.0.0.0:${HTTP_PORT:-8081} -s ${SOCKS_HOST}:${SOCKS_PORT:-1080}

@@ -1,0 +1,43 @@
+version: "3"
+services:
+
+  ssh-to-socks:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ztj1993/ssh-proxy:latest
+    command: ssh-to-socks
+    network_mode: bridge
+    environment:
+      - SSH_HOST=159.138.43.117
+      - SSH_PORT=22
+      - SSH_USER=root
+      - SSH_PASS=123456
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    expose:
+      - 1080/tcp
+    ports:
+      - 1080/tcp
+
+  socks-to-http:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ztj1993/ssh-proxy:latest
+    command: socks-to-http
+    network_mode: bridge
+    environment:
+      - SOCKS_HOST=ssh-to-socks
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    links:
+      - ssh-to-socks
+    depends_on:
+      - ssh-to-socks
+    expose:
+      - 8081/tcp
+    ports:
+      - 8081/tcp
